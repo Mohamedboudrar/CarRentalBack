@@ -28,8 +28,8 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 
 #### Auth
 
-- [ ] Create account /auth/register [POST]
-- [ ] Login /auth/login [POST]
+- [x] Create account /auth/register [POST]
+- [x] Login /auth/login [POST]
 - [ ] Forgot password /auth/forgot-password [POST]
 - [ ] Reset password /auth/reset-password [POST]
 

@@ -1,5 +1,16 @@
 from sqlalchemy.orm import Session
 from app import schemas, models, utils
+from datetime import timedelta, datetime
+from typing import Union
+from jose import jwt
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+secret_key = os.getenv("SECRET_KEY")
+algorithm = os.getenv("ALGORITHM")
+access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 def create_user(db: Session, body: schemas.RequestUser):
   hashed_pwd = utils.hash_password(body.password)
@@ -8,3 +19,23 @@ def create_user(db: Session, body: schemas.RequestUser):
   db.commit()
   db.refresh(new_user)
   return new_user
+
+def get_user_by_email(db: Session, email: str):
+  return db.query(models.User).filter(models.User.email == email).first()
+
+def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+  to_encode = data.copy()
+  if expires_delta:
+      expire = expires_delta
+  else:
+      expire = datetime.utcnow() + timedelta(minutes=15)
+  to_encode.update({"exp": expire})
+  encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
+  return encoded_jwt
+
+def login_user(user: models.User):
+  access_token_expires = datetime.utcnow() + timedelta(minutes=access_token_expire_minutes)
+  access_token = create_access_token(
+    data={"sub": user.email}, expires_delta=access_token_expires
+  )
+  return {"access_token": access_token, "token_type": "bearer"}
