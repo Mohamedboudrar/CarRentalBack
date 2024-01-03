@@ -15,3 +15,6 @@ class Response(BaseModel, Generic[T]):
   status: str
   message: str
   result: Optional[T]
+
+class DataToken(BaseModel):
+    id: Optional[str] = None

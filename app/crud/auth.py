@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 from typing import Union
 from jose import jwt
 import os
-from .utils import create_access_token
+from ..utils import create_access_token
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,9 +22,8 @@ def create_user(db: Session, body: schemas.RequestUser):
   return new_user
 
 def login_user(user: models.User):
-  access_token_expires = datetime.utcnow() + timedelta(minutes=access_token_expire_minutes)
   access_token = create_access_token(
-    data={"sub": user.email}, expires_delta=access_token_expires
+    data={"user_id": user.id}
   )
   return {"access_token": access_token, "token_type": "bearer"}
 

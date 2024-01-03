@@ -1,4 +1,4 @@
-# Car Rental API
+# Car Rental API (WIP)
 
 API service for a car rental platform where users can rent out their cars
 
@@ -30,6 +30,7 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 
 - [x] Create account /auth/register [POST]
 - [x] Login /auth/login [POST]
+- [ ] Current user /auth/me [GET]
 - [ ] Forgot password /auth/forgot-password [POST]
 - [ ] Reset password /auth/reset-password [POST]
 
@@ -59,13 +60,3 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [ ] booking detail /bookings/:id [GET]
 - [ ] confirm a booking /bookings/:id/confirm [PUT][HOST]
       booking status = canceled, confirmed
-
-### Database schemas
-
-#### User
-
-id, email, password, created_at
-
-### Profile
-
-id, user_id, first_name, last_name, gender, DOB,
