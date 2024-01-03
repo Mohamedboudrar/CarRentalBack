@@ -30,7 +30,7 @@ async def login(request: schemas.RequestUser, db:Session=Depends(db.get_db)):
 
 # wip
 @router.get('/me')
-def get_current_user(token: str):
+def get_current_user(token: str,  db:Session=Depends(db.get_db)):
   user = utils.get_current_user(token, db)
   return user
 
