@@ -18,6 +18,7 @@ class Response(BaseModel, Generic[T]):
 
 class DataToken(BaseModel):
     id: Optional[str] = None
-    
-class Token(BaseModel):
-    token: str
+
+class ChangePassword(BaseModel):
+  current_password: str
+  new_password: str

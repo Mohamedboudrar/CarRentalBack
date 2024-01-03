@@ -36,7 +36,7 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 
 #### User
 
-- [ ] Change password /user/change-password [POST]-[HOST,GUEST]
+- [x] Change password /user/change-password [POST]-[HOST,GUEST]
 - [ ] profile /user/profile [GET]-[HOST/GUEST]
 - [ ] rental history /user/rentals [GET]-[HOST/GUEST]
 

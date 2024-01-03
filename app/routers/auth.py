@@ -40,6 +40,7 @@ def get_token_header(authorization: str = Header(...)):
 def get_current_user(db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
   token = credentials.credentials
   user = utils.get_current_user(token, db)
+  del user.password
   return user
 
 @router.post('/forgot-password')
