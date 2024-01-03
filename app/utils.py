@@ -48,5 +48,4 @@ def get_current_user(token: str, db: Session = Depends(db.get_db)):
                                         headers={"WWW-Authenticate": "Bearer"})
   token = verify_token_access(token, credentials_exception)
   user = db.query(models.User).filter(models.User.id == token.id).first()
-  del user.password
   return user
