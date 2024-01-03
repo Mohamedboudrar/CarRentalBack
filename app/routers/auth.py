@@ -2,6 +2,9 @@ from fastapi import APIRouter, Depends, Response, HTTPException, Header, Securit
 from app import models, config, schemas, utils, db
 from sqlalchemy.orm import Session
 from app.crud.auth import get_user_by_email, login_user, create_user
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+security = HTTPBearer()
 
 models.Base.metadata.create_all(bind=config.engine)
 
@@ -28,9 +31,14 @@ async def login(request: schemas.RequestUser, db:Session=Depends(db.get_db)):
   response = login_user(db_user)
   return response
 
-# wip
+def get_token_header(authorization: str = Header(...)):
+    print("Authorization Header:", authorization)
+    # You can add custom logic to validate or process the authorization header here
+    return authorization
+
 @router.get('/me')
-def get_current_user(token: str,  db:Session=Depends(db.get_db)):
+def get_current_user(db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
+  token = credentials.credentials
   user = utils.get_current_user(token, db)
   return user
 
