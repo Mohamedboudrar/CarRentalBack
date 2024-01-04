@@ -9,12 +9,6 @@ class RequestUser(BaseModel):
   
   class Config:
     from_attributes = True
-  
-class Response(BaseModel, Generic[T]):
-  code: str
-  status: str
-  message: str
-  result: Optional[T]
 
 class DataToken(BaseModel):
     id: Optional[str] = None
@@ -22,3 +16,7 @@ class DataToken(BaseModel):
 class ChangePassword(BaseModel):
   current_password: str
   new_password: str
+  
+class Profile(BaseModel):
+  first_name: str
+  last_name: str
