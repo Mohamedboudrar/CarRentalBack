@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Text
 import datetime as dt
 
 from .config import Base
@@ -17,5 +17,5 @@ class Profile(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, unique=True)
-    first_name = Column(String)
-    last_name = Column(String)
+    first_name = Column(Text)
+    last_name = Column(Text)
