@@ -65,8 +65,11 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [ ] confirm a booking /bookings/:id/confirm [PUT][HOST]
       booking status = canceled, confirmed
 
-### Stack / Tools used
+### Technology used
 
-Python
-FastAPI
-Brevo for sending mail
+- Python
+- FastAPI
+- PostgreSQL
+- JWT for authentication
+- Brevo for sending mail
+- BetterStack for log management
