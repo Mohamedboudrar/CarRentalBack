@@ -3,9 +3,9 @@ from fastapi import HTTPException, status
 from app import models
 from app.utils.jwt_utils import create_access_token, verify_token_access
 from app.utils.password_utils import hash_password
-from ..mailer import send_mail
-import uuid
+from app.utils.mail_utils import send_mail
 from app.schemas import auth_schemas
+import uuid
 
 def create_user(db: Session, body: auth_schemas.RequestUser):
   hashed_pwd = hash_password(body.password)
