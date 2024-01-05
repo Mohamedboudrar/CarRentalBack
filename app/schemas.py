@@ -20,3 +20,14 @@ class ChangePassword(BaseModel):
 class Profile(BaseModel):
   first_name: str
   last_name: str
+
+class ForgotPassword(BaseModel):
+  email: str
+  
+class ResetPassword(BaseModel):
+  token: str
+  password: str
+  confirm_password: str
+
+class ValidateForgotPasswordCode(BaseModel):
+  token: str
