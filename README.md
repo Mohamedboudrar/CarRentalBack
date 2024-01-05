@@ -31,8 +31,9 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [x] Create account /auth/register [POST]
 - [x] Login /auth/login [POST]
 - [x] Current user /auth/me [GET]
-- [ ] Forgot password /auth/forgot-password [POST]
-- [ ] Reset password /auth/reset-password [POST]
+- [x] Forgot password /auth/forgot-password/reset-link [POST]
+- [x] Reset password /auth/forgot-password/validate [POST]
+- [x] Reset password /auth/forgot-password/update [POST]
 
 #### User
 
@@ -63,3 +64,9 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [ ] booking detail /bookings/:id [GET]
 - [ ] confirm a booking /bookings/:id/confirm [PUT][HOST]
       booking status = canceled, confirmed
+
+### Stack / Tools used
+
+Python
+FastAPI
+Brevo for sending mail
