@@ -26,3 +26,13 @@ class ForgotPasswordRequest(Base):
     id = Column(Integer, primary_key=True, index=True)
     token = Column(Text)
     created_at = Column(DateTime, default=dt.datetime.now)
+    
+class Vehicle(Base):
+    __tablename__ = "vehicles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(Text)
+    model = Column(Text)
+    description = Column(Text)
+    owner = Column(Integer)
+    created_at = Column(DateTime, default=dt.datetime.now)

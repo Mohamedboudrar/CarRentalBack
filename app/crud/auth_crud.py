@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app import schemas, models, utils
-from ..utils import create_access_token
-from ..mailer import send_mail
+from app import models
+from app.utils.jwt_utils import create_access_token, verify_token_access
+from app.utils.password_utils import hash_password
+from app.utils.mail_utils import send_mail
+from app.schemas import auth_schemas
 import uuid
 
-def create_user(db: Session, body: schemas.RequestUser):
-  hashed_pwd = utils.hash_password(body.password)
+def create_user(db: Session, body: auth_schemas.RequestUser):
+  hashed_pwd = hash_password(body.password)
   new_user = models.User(email=body.email, password=hashed_pwd)
   db.add(new_user)
   db.commit()
@@ -24,7 +26,7 @@ def get_user_by_email(db: Session, email: str):
 
 def handle_forgot_pwd_req(db: Session, db_user: models.User):
   original_random_guid = str(uuid.uuid4())
-  token= utils.create_access_token(data={"token": original_random_guid, "user_id": db_user.id}, minutes=20)
+  token= create_access_token(data={"token": original_random_guid, "user_id": db_user.id}, minutes=20)
   new_pwd_req = models.ForgotPasswordRequest(token=token)
   db.add(new_pwd_req)
   db.commit()
@@ -37,14 +39,14 @@ def handle_forgot_pwd_req(db: Session, db_user: models.User):
             text_content=html_content)
   return {"message": "Reset link sent to your email address"}
 
-def reset_user_password(request: schemas.ResetPassword, db: Session):
+def reset_user_password(request: auth_schemas.ResetPassword, db: Session):
   if request.password != request.confirm_password:
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Passwords dont match")
   if not request.token:
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Token not provided")
-  is_verified_token = utils.verify_token_access(request.token)
+  is_verified_token = verify_token_access(request.token)
   # update user's password
-  hashed_pwd = utils.hash_password(request.password)
+  hashed_pwd = hash_password(request.password)
   db_user = db.get(models.User, is_verified_token.id)
   updated_user = models.User(id=is_verified_token.id, password=hashed_pwd)
   setattr(db_user, "password", updated_user.password)
