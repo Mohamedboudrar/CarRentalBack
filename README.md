@@ -39,22 +39,21 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 
 - [x] Change password /user/change-password [POST]-[HOST,GUEST]
 - [x] get user's profile /user/profile/:id [GET]-[HOST/GUEST]
-- [x] get current user's profile /user/profile/me [GET]-[HOST/GUEST]
-- [x] create profile /user/profile [POST]-[HOST/GUEST]
+- [x] get current user's profile /user/me/profile [GET]-[HOST/GUEST]
+- [x] get current user's vehicles /user/me/vehicles [GET]-[HOST/GUEST]
+- [x] create profile AKA onboarding /user/profile [POST]-[HOST/GUEST]
 - [x] update profile /user/profile [PUT]-[HOST/GUEST]
 - [ ] rental history /user/rentals [GET]-[HOST/GUEST]
 
 #### Vehicles
 
-- [ ] create /vehicles [POST]-[HOST]
-- [ ] list /vehicles?status=[available / active / unavailable] [GET]-[HOST]
-- [ ] vehicle detail /vehicles/:id [GET]
-- [ ] update vehicle detail /vehicles/:id [PUT]-[HOST]
-- [ ] delete /vehicles/:id [DELETE]-[HOST]
-
-- [ ] vehicle timeline /vehicles/:id/timeline [GET]-[HOST]
+- [x] create /vehicles [POST]-[HOST]
+- [x] list /vehicles?status=[available / active / unavailable] [GET]
+- [ ] upload vehicle photos /vehicles/:id/upload [POST][HOST]
+- [x] vehicle detail /vehicles/:id [GET]
+- [x] update vehicle detail /vehicles/:id [PUT]-[HOST]
+- [x] delete /vehicles/:id [DELETE]-[HOST]
 - [ ] vehicle reservations /vehicles/:id/reservations [GET]
-- [ ] change vehicle status /vehicles/:id/status [PUT] {"status": "available / active / unavailable" }[HOST]
 
 #### Bookings
 
@@ -73,3 +72,13 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - JWT for authentication
 - Brevo for sending mail
 - BetterStack for log management
+
+### Getting started
+
+```sh
+# install dependencies
+pip install -r requirements.txt
+
+# run app
+uvicorn app.main:app --reload
+```
