@@ -1,23 +1,20 @@
-from typing import Optional, TypeVar
+from typing import Optional
 from pydantic import BaseModel,Field, EmailStr
     
 class RequestUser(BaseModel):
-  email: Optional[EmailStr]=Field(...)
-  password: Optional[str]=Field(...)
-  
-  class Config:
-    from_attributes = True
+    email: EmailStr=Field(...)
+    password: str=Field(...)
     
 class DataToken(BaseModel):
     id: Optional[str] = None
     
 class ForgotPassword(BaseModel):
-  email: str
+    email: EmailStr=Field(...)
   
 class ResetPassword(BaseModel):
-  token: str
-  password: str
-  confirm_password: str
+    token: str
+    password: str=Field(...)
+    confirm_password: str=Field(...)
 
 class ValidateForgotPasswordCode(BaseModel):
-  token: str
+    token: str

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, String, DateTime, Text, Enum as sqlAlchemyEnum
 import datetime as dt
-
+from app.schemas import vehicle_schemas
 from .db import Base
 
 class User(Base):
@@ -27,6 +27,7 @@ class ForgotPasswordRequest(Base):
     token = Column(Text)
     created_at = Column(DateTime, default=dt.datetime.now)
     
+
 class Vehicle(Base):
     __tablename__ = "vehicles"
 
@@ -34,5 +35,7 @@ class Vehicle(Base):
     name = Column(Text)
     model = Column(Text)
     description = Column(Text)
-    owner = Column(Integer)
+    user_id = Column(Integer)
+    status = Column(sqlAlchemyEnum(vehicle_schemas.StatusEnum))
     created_at = Column(DateTime, default=dt.datetime.now)
+    
