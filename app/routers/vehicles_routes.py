@@ -32,26 +32,27 @@ async def update_vehicle(vehicle_id: int, request: vehicle_schemas.AddVehicle, d
     user = user_crud.handle_get_current_user(token, db)
     vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
     if not vehicle:
-      return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
     if vehicle.user_id != user.id:
-        return HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to update this vehicle because you dont own it")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to update this vehicle because you dont own it")
     response = vehicle_crud.handle_update_vehicle(db, request, vehicle_id)
     return response
 
 @router.delete('/{vehicle_id}')
-async def delete_vehicle(id: int, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
+async def delete_vehicle(vehicle_id: int, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
     token = credentials.credentials
     user = user_crud.handle_get_current_user(token, db)
-    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == id).first()
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
     if not vehicle:
-      return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+      raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
     if vehicle.user_id != user.id:
-        return HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to delete this vehicle because you dont own it")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to delete this vehicle because you dont own it")
     if vehicle.status == vehicle_schemas.StatusEnum.active:
-        return HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to delete a currently active vehicle")
-    response = vehicle_crud.delete_vehicle(db, id)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not allowed to delete a currently active vehicle")
+    response = vehicle_crud.delete_vehicle(db, vehicle_id)
     return response
 
-@router.get('/{vehicle_id}/reservations')
-async def vehicle_reservations():
-    return []
+@router.get('/{vehicle_id}/bookings')
+async def vehicle_reservations(vehicle_id: int, db:Session=Depends(db.get_db)):
+    vehicle_bookings = db.query(models.Booking).filter(models.Booking.vehicle_id == vehicle_id & models.Booking.is_canceled == False).all()
+    return vehicle_bookings

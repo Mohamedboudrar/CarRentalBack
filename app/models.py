@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Enum as sqlAlchemyEnum
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, Date, Enum as sqlAlchemyEnum
 import datetime as dt
 from app.schemas import vehicle_schemas
 from .db import Base
@@ -37,5 +37,17 @@ class Vehicle(Base):
     description = Column(Text)
     user_id = Column(Integer)
     status = Column(sqlAlchemyEnum(vehicle_schemas.StatusEnum))
+    created_at = Column(DateTime, default=dt.datetime.now)
+    
+class Booking(Base):
+    __tablename__ = "bookings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    start_date = Column(Date)
+    end_date = Column(Date)
+    vehicle_id = Column(Integer)
+    user_id = Column(Integer)
+    is_confirmed = Column(Boolean, default=False)
+    is_canceled = Column(Boolean, default=False)
     created_at = Column(DateTime, default=dt.datetime.now)
     

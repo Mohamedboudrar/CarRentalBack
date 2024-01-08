@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app import models, db
 from app.schemas import user_schemas
-from fastapi import Depends
+from fastapi import Depends, Response, status
 from app.utils.jwt_utils import verify_token_access
 from app.utils.password_utils import hash_password
 
@@ -32,3 +32,11 @@ def handle_get_current_user(token: str, db: Session = Depends(db.get_db)):
   token = verify_token_access(token)
   user = db.query(models.User).filter(models.User.id == token.id).first()
   return user
+
+def get_user_profile(response: Response, id: str, db: Session = Depends(db.get_db)):
+    profile_exists = db.query(models.Profile).filter(models.Profile.user_id == id).first()
+    if not profile_exists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"message": "profile NOT FOUND"}
+    response.status_code = status.HTTP_200_OK
+    return profile_exists
