@@ -3,13 +3,18 @@ from jose import jwt, JWTError
 from app.schemas import auth_schemas
 from fastapi import HTTPException, status
 from app.config import secret_key, algorithm, access_token_expire_minutes
+import json
+import uuid
 
+      
 def create_access_token(data: dict, minutes: int = None):
-  to_encode = data.copy()
-  expire = datetime.utcnow() + timedelta(minutes=access_token_expire_minutes if not minutes else minutes)
-  to_encode.update({"exp": expire})
-  encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
-  return encoded_jwt
+    uuid_string = str(data['user_id'])
+    data = {'user_id': uuid_string} # reassign user_id value
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=access_token_expire_minutes if not minutes else minutes)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
+    return encoded_jwt
 
 def verify_token_access(token: str):
   credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

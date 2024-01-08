@@ -53,12 +53,8 @@ async def fetch_current_user_vehicles(db:Session=Depends(db.get_db), credentials
 
 @router.get('/profile/{user_id}')
 async def fetch_user_profile(response: Response, id: str, db:Session=Depends(db.get_db)):
-    profile_exists = db.query(models.Profile).filter(models.Profile.user_id == id).first()
-    if not profile_exists:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"message": "profile NOT FOUND"}
-    response.status_code = status.HTTP_200_OK
-    return profile_exists
+    crud_response = user_crud.get_user_profile(response, id, db)
+    return crud_response
 
 @router.put('/profile')
 async def update_current_user_profile(response: Response, request: user_schemas.Profile, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):

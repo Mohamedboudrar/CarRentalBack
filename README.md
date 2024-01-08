@@ -43,7 +43,7 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [x] get current user's vehicles /user/me/vehicles [GET]-[HOST/GUEST]
 - [x] create profile AKA onboarding /user/profile [POST]-[HOST/GUEST]
 - [x] update profile /user/profile [PUT]-[HOST/GUEST]
-- [ ] rental history /user/rentals [GET]-[HOST/GUEST]
+- [ ] rental history /user/rentals [GET]-[GUEST]
 
 #### Vehicles
 
@@ -53,15 +53,15 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [x] vehicle detail /vehicles/:id [GET]
 - [x] update vehicle detail /vehicles/:id [PUT]-[HOST]
 - [x] delete /vehicles/:id [DELETE]-[HOST]
-- [ ] vehicle reservations /vehicles/:id/reservations [GET]
+- [x] vehicle reservations /vehicles/:id/bookings [GET]
 
 #### Bookings
 
-- [ ] make a booking /bookings [POST]-[GUEST]
-- [ ] cancel booking /bookings/:id/cancel [PUT]-[HOST,GUEST]
+- [x] make a booking /bookings [POST]-[GUEST]
+- [x] cancel booking /bookings/:id/cancel [PUT]-[HOST,GUEST]
 - [ ] update booking /bookings/:id [PUT]
 - [ ] booking detail /bookings/:id [GET]
-- [ ] confirm a booking /bookings/:id/confirm [PUT][HOST]
+- [x] confirm a booking /bookings/:id/confirm [PUT][HOST]
       booking status = canceled, confirmed
 
 ### Technology used
@@ -71,7 +71,7 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - PostgreSQL
 - JWT for authentication
 - Brevo for sending mail
-- BetterStack for log management
+- BetterStack for log monitoring
 
 ### Getting started
 
@@ -82,3 +82,11 @@ pip install -r requirements.txt
 # run app
 uvicorn app.main:app --reload
 ```
+
+## Todo
+
+- [ ] refresh token
+- [x] move from id to uuid
+- [ ] email template
+- [ ] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
+- [ ] find a way to use middleware to implment token verification
