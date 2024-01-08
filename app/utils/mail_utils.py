@@ -17,6 +17,4 @@ def send_mail(to_email: str, subject: str, text_content: str):
       "api-key": brevo_api_key,
       "content-type": "application/json",
   }
-  response = requests.request("POST", url, headers=headers, data=payload)
-  print(response.text)
-  return
+  return requests.request("POST", url, headers=headers, data=payload)

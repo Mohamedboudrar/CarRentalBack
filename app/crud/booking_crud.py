@@ -12,7 +12,7 @@ def send_booking_confirmation_mail(vehicle_owner_email, booker_detail_email):
               subject="Vehicle booked",
               text_content="<html><body>Hello, vehicle has been booked. await confirmation from host</body></html>")
   
-def handle_make_booking(body: booking_schemas.MakeBooking, db: Session, user_id: int):
+def handle_make_booking(body: booking_schemas.MakeBooking, db: Session, user_id: str):
     vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == body.vehicle_id).first()
     conflicting_vehicle_bookings = db.query(models.Booking)\
                                   .filter(models.Booking.vehicle_id == body.vehicle_id)\
@@ -31,21 +31,20 @@ def handle_make_booking(body: booking_schemas.MakeBooking, db: Session, user_id:
     db.add(new_booking)
     db.commit()
     db.refresh(new_booking)
-    print(new_booking.end_date)
     # send booking mail to owner of vehicle and user
     vehicle_owner_detail = db.query(models.User).filter(models.User.id == vehicle.user_id).first()
     booker_detail = db.query(models.User).filter(models.User.id == user_id).first()
     send_booking_confirmation_mail(vehicle_owner_detail.email, booker_detail.email)
     return {"message": "Booking successful"}
   
-def handle_booking_confirmation(db: Session, booking_id: int):
+def handle_booking_confirmation(db: Session, booking_id: str):
     booking = db.query(models.Booking).filter(models.Booking.id == booking_id)
     booking.update({"is_confirmed": True})
     db.commit()
     return {"message": "Booking confirmed"}
   
   
-def handle_booking_cancellation(db: Session, booking_id: int):
+def handle_booking_cancellation(db: Session, booking_id: str):
     booking = db.query(models.Booking).filter(models.Booking.id == booking_id)
     booking.update({"is_canceled": True})
     db.commit()

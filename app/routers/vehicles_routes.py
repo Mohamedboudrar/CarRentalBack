@@ -22,12 +22,12 @@ async def list_vehicles(status: str = 'available', db:Session=Depends(db.get_db)
     return vehicles
 
 @router.get('/{vehicle_id}')
-async def vehicle_detail(id: int, db:Session=Depends(db.get_db)):
+async def vehicle_detail(id: str, db:Session=Depends(db.get_db)):
     response = vehicle_crud.get_vehicle_details(db, id)
     return response
 
 @router.put('/{vehicle_id}')
-async def update_vehicle(vehicle_id: int, request: vehicle_schemas.AddVehicle, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
+async def update_vehicle(vehicle_id: str, request: vehicle_schemas.AddVehicle, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
     token = credentials.credentials
     user = user_crud.handle_get_current_user(token, db)
     vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
@@ -39,7 +39,7 @@ async def update_vehicle(vehicle_id: int, request: vehicle_schemas.AddVehicle, d
     return response
 
 @router.delete('/{vehicle_id}')
-async def delete_vehicle(vehicle_id: int, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
+async def delete_vehicle(vehicle_id: str, db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
     token = credentials.credentials
     user = user_crud.handle_get_current_user(token, db)
     vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
@@ -53,6 +53,6 @@ async def delete_vehicle(vehicle_id: int, db:Session=Depends(db.get_db), credent
     return response
 
 @router.get('/{vehicle_id}/bookings')
-async def vehicle_reservations(vehicle_id: int, db:Session=Depends(db.get_db)):
+async def vehicle_reservations(vehicle_id: str, db:Session=Depends(db.get_db)):
     vehicle_bookings = db.query(models.Booking).filter(models.Booking.vehicle_id == vehicle_id & models.Booking.is_canceled == False).all()
     return vehicle_bookings
