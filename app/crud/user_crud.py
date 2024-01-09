@@ -14,13 +14,6 @@ def update_password(db: Session, password: str, id: str):
   db.commit()
   db.refresh(db_user)
   return {"message": "Password change successful"}
-  
-def create_user_profile(db: Session, body: user_schemas.Profile, user_id: str):
-  new_profile = models.Profile(user_id=user_id, first_name=body.first_name, last_name=body.last_name)
-  db.add(new_profile)
-  db.commit()
-  db.refresh(new_profile)
-  return {"message": "Profile created"}
 
 def handle_update_current_user_profile(db: Session, body: user_schemas.Profile, user_id: str):
   db_user = db.query(models.Profile).filter(models.Profile.user_id == user_id)

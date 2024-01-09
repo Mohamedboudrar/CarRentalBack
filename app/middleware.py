@@ -1,6 +1,10 @@
-from fastapi import Request
+from fastapi import Request, Security
 from app.logger import logger
 import time
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from app.utils import jwt_utils
+
+security = HTTPBearer()
 
 async def log_middleware(request: Request, call_next):
   start_time = time.time()
@@ -15,3 +19,13 @@ async def log_middleware(request: Request, call_next):
   logger.info(log_dict, extra=log_dict)
   
   return response
+
+
+def auth_dependency_middleware():
+    def _dependency(request: Request, credentials: HTTPAuthorizationCredentials = Security(security)):
+        token = credentials.credentials
+        user = jwt_utils.verify_token_access(token)
+        request.state.user = user
+        return user
+
+    return _dependency

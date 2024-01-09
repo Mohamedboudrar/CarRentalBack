@@ -1,7 +1,13 @@
 from typing import Optional
 from pydantic import BaseModel,Field, EmailStr
+
+class Register(BaseModel):
+    email: EmailStr=Field(...)
+    password: str=Field(...)
+    first_name: str=Field(...)
+    last_name: str=Field(...)
     
-class RequestUser(BaseModel):
+class Login(BaseModel):
     email: EmailStr=Field(...)
     password: str=Field(...)
     

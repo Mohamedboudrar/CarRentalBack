@@ -41,7 +41,6 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [x] get user's profile /user/profile/:id [GET]-[HOST/GUEST]
 - [x] get current user's profile /user/me/profile [GET]-[HOST/GUEST]
 - [x] get current user's vehicles /user/me/vehicles [GET]-[HOST/GUEST]
-- [x] create profile AKA onboarding /user/profile [POST]-[HOST/GUEST]
 - [x] update profile /user/profile [PUT]-[HOST/GUEST]
 - [ ] rental history /user/rentals [GET]-[GUEST]
 
@@ -88,5 +87,5 @@ uvicorn app.main:app --reload
 - [ ] refresh token
 - [x] move from id to uuid
 - [ ] email template
-- [ ] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
-- [ ] find a way to use middleware to implment token verification
+- [x] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
+- [x] find a way to use middleware to implment token verification
