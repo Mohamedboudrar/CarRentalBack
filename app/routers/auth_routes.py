@@ -16,23 +16,23 @@ router = APIRouter()
 
 @router.post('/register')
 async def register(body: auth_schemas.Register, db:Session=Depends(db.get_db)):
-  db_user = auth_crud.get_user_by_email(db, email=body.email)
-  if db_user:
-    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
-  auth_crud.create_user(db, body)
-  return Response(
-    status_code=201
-  )
+    db_user = auth_crud.get_user_by_email(db, email=body.email)
+    if db_user:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
+    auth_crud.create_user(db, body)
+    return Response(
+        status_code=201
+    )
 
 
 @router.post('/login')
 async def login(body: auth_schemas.Login, db:Session=Depends(db.get_db)):
     db_user = auth_crud.get_user_by_email(db, email=body.email)
     if not db_user:
-      raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email does not exist")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email does not exist")
     verified = verify_password(body.password, db_user.password)
     if not verified:
-      raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
     response = auth_crud.login_user(db_user)
     return response
 

@@ -12,9 +12,9 @@ async def log_middleware(request: Request, call_next):
   process_time = time.time() - start_time
   response.headers["X-Process-Time"] = str(process_time)
   log_dict = {
-    'url': request.url.path,
-    'method': request.method,
-    'process_time': process_time
+      'url': request.url.path,
+      'method': request.method,
+      'process_time': process_time
   }
   logger.info(log_dict, extra=log_dict)
   

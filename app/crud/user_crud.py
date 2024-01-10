@@ -16,7 +16,7 @@ def update_password(db: Session, password: str, id: str):
   return {"message": "Password change successful"}
 
 def handle_update_current_user_profile(db: Session, body: user_schemas.Profile, user_id: str):
-  db_user = db.query(models.Profile).filter(models.Profile.user_id == user_id)
+  db_user = db.query(models.User).filter(models.User.id == user_id)
   db_user.update({"first_name": body.first_name, "last_name": body.last_name})
   db.commit()
   return {"message": "Profile has been updated"}
@@ -27,7 +27,7 @@ def handle_get_current_user(token: str, db: Session = Depends(db.get_db)):
   return user
 
 def get_user_profile(response: Response, id: str, db: Session = Depends(db.get_db)):
-    profile_exists = db.query(models.Profile).filter(models.Profile.user_id == id).first()
+    profile_exists = db.query(models.User).filter(models.User.id == id).first()
     if not profile_exists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"message": "profile NOT FOUND"}

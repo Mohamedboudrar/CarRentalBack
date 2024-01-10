@@ -9,14 +9,10 @@ import uuid
 
 def create_user(db: Session, body: auth_schemas.Register):
     hashed_pwd = hash_password(body.password)
-    new_user = models.User(email=body.email, password=hashed_pwd)
+    new_user = models.User(email=body.email, password=hashed_pwd, first_name=body.first_name, last_name=body.last_name)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    new_profile = models.Profile(user_id=new_user.id, first_name=body.first_name, last_name=body.last_name)
-    db.add(new_profile)
-    db.commit()
-    db.refresh(new_profile)
     return new_user
 
 def login_user(user: models.User):
