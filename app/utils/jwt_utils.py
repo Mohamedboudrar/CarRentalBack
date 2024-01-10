@@ -21,12 +21,12 @@ def verify_token_access(token: str):
                                         detail="Could not Validate Credentials. Token is invalid or expired",
                                         headers={"WWW-Authenticate": "Bearer"})
   try:
-    payload = jwt.decode(token, secret_key, algorithms=algorithm)
-    id: str = payload.get("user_id")
-    if id is None:
-      raise credentials_exception
-    token_data = auth_schemas.DataToken(id=str(id))
+      payload = jwt.decode(token, secret_key, algorithms=algorithm)
+      id: str = payload.get("user_id")
+      if id is None:
+          raise credentials_exception
+      token_data = auth_schemas.DataToken(id=str(id))
   except JWTError as e:
-    print(e)
-    raise credentials_exception
+      print(e)
+      raise credentials_exception
   return token_data

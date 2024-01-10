@@ -10,7 +10,7 @@ logger = logging.getLogger()
 # ==================================================
 # create formatter to determine format of log records
 formatter = logging.Formatter(
-  fmt="%(asctime)s - %(levelname)s - %(message)s"
+    fmt="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 # =================================================================

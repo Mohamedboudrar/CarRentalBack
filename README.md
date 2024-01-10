@@ -1,27 +1,33 @@
-# Car Rental API (WIP)
+# Car Rental API
 
-API service for a car rental platform where users can rent out their cars
+API service for a car rental platform where users can rent out their vehicles as well as rent vehicles of other users. Inspired by the AirBnB platform.
+
+### Technology used
+
+- Python programming language
+- FastAPI - Really fast python library for building APIs
+- PostgreSQL database
+- JWT for authentication
+- Brevo for sending mail because it is free and easy to setup
+- BetterStack for log monitoring <3
 
 ### Requirements
 
-Quiver is a vehicle rental platform that wants to make it easy for users to rent out their vehicles. The goal is to build a API service for that.
+- Users can create an account that allows them serve as host and renter depending on context
 
-- Users can create an acocunt that serves for both Vehicle owner or renter
-
-#### as Vehicle owner
+##### As Host
 
 - User can add their vehicles to rent out with important information like; name, model, type, pricing, description, location, color, engine information, photos etc
 - user can update vehicle information
-- User can see list of vehicles they have added
-- User can filter vehicles by status i.e active, reserved, available
-- User can see rent history of a vehicle. e.g when a vehicle was reserved, when it became active, when it became available, when it was canceled
-- user can cancel reservation
+- User can see list of vehicles they own and can filter by status i.e active, reserved, available(see detail here)
+- User can see history of a vehicle. e.g when a vehicle was added, booked, when it became active, when it became available, when it was canceled etc
+- user can confirm or cancel reservation
 
-#### as Renter
+##### As Renter
 
-- User can find vehicles they want to rent by running a quick search or seeing catalogs of vehicles
-- User can reserve desired vehicle by submitting rent and return date. User cannot reserve a vehicle that has been reserved at a set time
-- user can cancel reservation
+- User can find vehicles they want to rent by running a quick search or seeing catalogs of vehicles. This can be sorted by location, vehicle name, model, color, price etc
+- User can book a vehicle by submitting rent and return date. User cannot reserve a vehicle that has been reserved at a set date and time
+- user can cancel booking
 - User can see rental history
 
 ### API Endpoints
@@ -39,11 +45,8 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 
 - [x] Change password /user/change-password [POST]-[HOST,GUEST]
 - [x] get user's profile /user/profile/:id [GET]-[HOST/GUEST]
-- [x] get current user's profile /user/me/profile [GET]-[HOST/GUEST]
 - [x] get current user's vehicles /user/me/vehicles [GET]-[HOST/GUEST]
-- [x] create profile AKA onboarding /user/profile [POST]-[HOST/GUEST]
 - [x] update profile /user/profile [PUT]-[HOST/GUEST]
-- [ ] rental history /user/rentals [GET]-[GUEST]
 
 #### Vehicles
 
@@ -64,29 +67,45 @@ Quiver is a vehicle rental platform that wants to make it easy for users to rent
 - [x] confirm a booking /bookings/:id/confirm [PUT][HOST]
       booking status = canceled, confirmed
 
-### Technology used
+### How to Install and Run the Project
 
-- Python
-- FastAPI
-- PostgreSQL
-- JWT for authentication
-- Brevo for sending mail
-- BetterStack for log monitoring
-
-### Getting started
+This project requires a `.env` file in the project root. Rename the `env.sample` to `.env`
 
 ```sh
-# install dependencies
+# file - .env
+
+# Database connection
+DATABASE_URL =
+
+# JWT
+SECRET_KEY =
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+# Mailing - https://www.brevo.com/
+EMAIL_FROM =
+BREVO_API_KEY =
+
+# Logging - https://betterstack.com/
+BETTERSTACK_LOG_SOURCE_TOKEN =
+```
+
+##### Install dependencies and run project
+
+```sh
+# install all dependencies
 pip install -r requirements.txt
 
 # run app
 uvicorn app.main:app --reload
 ```
 
-## Todo
+## Todos
 
 - [ ] refresh token
 - [x] move from id to uuid
 - [ ] email template
-- [ ] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
-- [ ] find a way to use middleware to implment token verification
+- [x] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
+- [x] find a way to use middleware to implment token verification
+- [ ] Containerize using Docker
+- [ ] Reviews and rating system

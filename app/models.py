@@ -11,16 +11,9 @@ class User(Base):
     id = Column(UUID(as_uuid=True), default=uuid.uuid4().hex, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    created_at = Column(DateTime, default=dt.datetime.now)
-    
-
-class Profile(Base):
-    __tablename__ = "profiles"
-
-    id = Column(UUID(as_uuid=True), default=uuid.uuid4().hex, primary_key=True, index=True)
-    user_id = Column(UUID, unique=True)
     first_name = Column(Text)
     last_name = Column(Text)
+    created_at = Column(DateTime, default=dt.datetime.now)
     
 class ForgotPasswordRequest(Base):
     __tablename__ = "forgot_password_requests"
