@@ -3,8 +3,6 @@ from jose import jwt, JWTError
 from app.schemas import auth_schemas
 from fastapi import HTTPException, status
 from app.config import secret_key, algorithm, access_token_expire_minutes
-import json
-import uuid
 
       
 def create_access_token(data: dict, minutes: int = None):
@@ -16,7 +14,7 @@ def create_access_token(data: dict, minutes: int = None):
     encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
     return encoded_jwt
 
-def verify_token_access(token: str):
+def verify_access_token(token: str):
   credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                         detail="Could not Validate Credentials. Token is invalid or expired",
                                         headers={"WWW-Authenticate": "Bearer"})

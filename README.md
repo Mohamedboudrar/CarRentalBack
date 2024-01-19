@@ -105,7 +105,7 @@ uvicorn app.main:app --reload
 - [ ] refresh token
 - [x] move from id to uuid
 - [ ] email template
-- [x] change user_crud.handle_get_current_user to jwt_utils.verify_token_access(token)
+- [x] change user_crud.handle_get_current_user to jwt_utils.verify_access_token(token)
 - [x] find a way to use middleware to implment token verification
 - [ ] Containerize using Docker
 - [ ] Reviews and rating system

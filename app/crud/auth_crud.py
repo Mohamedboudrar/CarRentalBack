@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app import models
-from app.utils.jwt_utils import create_access_token, verify_token_access
+from app.utils.jwt_utils import create_access_token, verify_access_token
 from app.utils.password_utils import hash_password
 from app.utils.mail_utils import send_mail
 from app.schemas import auth_schemas
@@ -45,7 +45,7 @@ def reset_user_password(body: auth_schemas.ResetPassword, db: Session):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Passwords dont match")
     if not body.token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Token not provided")
-    is_verified_token = verify_token_access(body.token)
+    is_verified_token = verify_access_token(body.token)
     # update user's password
     hashed_pwd = hash_password(body.password)
     db_user = db.get(models.User, is_verified_token.id)

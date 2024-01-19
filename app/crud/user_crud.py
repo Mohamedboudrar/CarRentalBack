@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app import models, db
 from app.schemas import user_schemas
 from fastapi import Depends, Response, status
-from app.utils.jwt_utils import verify_token_access
+from app.utils.jwt_utils import verify_access_token
 from app.utils.password_utils import hash_password
 
 def update_password(db: Session, password: str, id: str):
@@ -22,7 +22,7 @@ def handle_update_current_user_profile(db: Session, body: user_schemas.Profile, 
   return {"message": "Profile has been updated"}
 
 def handle_get_current_user(token: str, db: Session = Depends(db.get_db)):
-  token = verify_token_access(token)
+  token = verify_access_token(token)
   user = db.query(models.User).filter(models.User.id == token.id).first()
   return user
 

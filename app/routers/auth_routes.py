@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, Response, HTTPException, Security, status
+from fastapi import APIRouter, Depends, Response, HTTPException, status, Request
 from app import models, db
 from app.utils.password_utils import verify_password
-from app.utils.jwt_utils import verify_token_access
+from app.utils.jwt_utils import verify_access_token
 from sqlalchemy.orm import Session
 from app.crud import auth_crud, user_crud
-
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPBearer
 from app.schemas import auth_schemas
+from app.middleware import auth_dependency_middleware
 
 security = HTTPBearer()
 
@@ -37,10 +37,9 @@ async def login(body: auth_schemas.Login, db:Session=Depends(db.get_db)):
     return response
 
 
-@router.get('/me')
-def get_current_user(db:Session=Depends(db.get_db), credentials: HTTPAuthorizationCredentials = Security(security)):
-    token = credentials.credentials
-    user = user_crud.handle_get_current_user(token, db)
+@router.get('/me', dependencies=[Depends(auth_dependency_middleware())])
+def get_current_user(response: Response, request: Request, db:Session=Depends(db.get_db)):
+    user = user_crud.get_user_profile(response, request.state.user.id, db)
     del user.password
     return user
 
@@ -56,7 +55,7 @@ async def get_link_to_reset_password(body: auth_schemas.ForgotPassword, db:Sessi
 
 @router.post('/forgot-password/validate')
 async def verify_forgot_password_request(body: auth_schemas.ValidateForgotPasswordCode):
-    verify_token_access(body.token)
+    verify_access_token(body.token)
     return HTTPException(status_code=status.HTTP_200_OK, detail={"verified": True})
 
 

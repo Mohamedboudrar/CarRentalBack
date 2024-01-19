@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends, Security, status, Response, Request
+from fastapi import APIRouter, Depends, status, Response, Request
 from app import db
 from sqlalchemy.orm import Session
 from app import models
 from app.schemas import user_schemas
-from app.utils.jwt_utils import verify_token_access
 from app.utils.password_utils import verify_password
 from app.crud import user_crud
 from app.middleware import auth_dependency_middleware
-
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPBearer
 
 security = HTTPBearer()
 
@@ -16,9 +14,8 @@ router = APIRouter()
 
 
 @router.post('/change-password', dependencies=[Depends(auth_dependency_middleware())])
-async def reset_password(body: user_schemas.ChangePassword, response: Response, db:Session=Depends(db.get_db),  credentials: HTTPAuthorizationCredentials = Security(security)):
-    token = credentials.credentials
-    user = user_crud.handle_get_current_user(token, db)
+async def reset_password(body: user_schemas.ChangePassword, response: Response, request: Request, db:Session=Depends(db.get_db)):
+    user = user_crud.get_user_profile(response, request.state.user.id, db)
     is_verified_password = verify_password(body.current_password, user.password)
     if (is_verified_password):
         response = user_crud.update_password(db, body.new_password, user.id)
