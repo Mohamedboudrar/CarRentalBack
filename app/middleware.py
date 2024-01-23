@@ -24,7 +24,7 @@ async def log_middleware(request: Request, call_next):
 def auth_dependency_middleware():
     def _dependency(request: Request, credentials: HTTPAuthorizationCredentials = Security(security)):
         token = credentials.credentials
-        user = jwt_utils.verify_token_access(token)
+        user = jwt_utils.verify_access_token(token)
         request.state.user = user
         return user
 
