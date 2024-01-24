@@ -94,10 +94,10 @@ BETTERSTACK_LOG_SOURCE_TOKEN =
 
 ```sh
 # install all dependencies
-pip install -r requirements.txt
+pdm install
 
 # run app
-uvicorn app.main:app --reload
+pdm run start
 ```
 
 ## Todos
