@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, Date, Enum as sqlAlchemyEnum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text,Float, Boolean, Date, Enum as sqlAlchemyEnum
 import datetime as dt
 from app.schemas import vehicle_schemas
 from .db import Base
+from typing import Optional
+
 import uuid
 
 class User(Base):
@@ -22,15 +24,17 @@ class ForgotPasswordRequest(Base):
     created_at = Column(DateTime, default=dt.datetime.now)
 
 class Vehicle(Base):
-    __tablename__ = "vehicles"
+    __tablename__ = 'vehicles'
 
-    id = Column(String(36), default=lambda: str(uuid.uuid4()), primary_key=True, index=True)
-    name = Column(Text)
-    model = Column(Text)
-    description = Column(Text)
-    user_id = Column(String(36))
-    status = Column(sqlAlchemyEnum(vehicle_schemas.StatusEnum))
-    created_at = Column(DateTime, default=dt.datetime.now)
+    id = Column(String(36),default=lambda: str(uuid.uuid4()), primary_key=True, index=True)
+    name = Column(String(255), index=True)
+    model = Column(String(255))
+    description = Column(String(255))
+    user_id = Column(String(36), ForeignKey('users.id'))
+    status = Column(String(255))
+    created_at = Column(DateTime)
+    price = Column(Float)  # Add this line
+    picture = Column(String(255), nullable=True)
 
 class Booking(Base):
     __tablename__ = "bookings"
